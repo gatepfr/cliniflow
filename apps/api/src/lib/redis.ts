@@ -1,6 +1,6 @@
-import IORedis from 'ioredis';
+import { Redis } from 'ioredis';
 
-export const redis = new IORedis({
+export const redis = new Redis({
   host: process.env['REDIS_HOST'] ?? 'localhost',
   port: parseInt(process.env['REDIS_PORT'] ?? '6379', 10),
   // For the API (producer), use default maxRetriesPerRequest (fail fast)
@@ -8,7 +8,7 @@ export const redis = new IORedis({
   lazyConnect: true,
 });
 
-redis.on('error', (err) => {
+redis.on('error', (err: Error) => {
   // Log Redis connection errors without PII
   console.error('[Redis] Connection error:', err.message);
 });

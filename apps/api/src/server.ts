@@ -8,7 +8,9 @@ import { webhookRoutes } from './routes/webhooks/index.js';
 
 export async function buildApp() {
   const app = Fastify({
-    logger,
+    // Cast to any to bridge Pino Logger -> FastifyLoggerOptions — safe, same pino instance
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    logger: logger as any,
     trustProxy: true,
   });
 
@@ -27,14 +29,13 @@ export async function buildApp() {
   await app.register(webhookRoutes, { prefix: '/webhooks' });
 
   // Global error handler
-  app.setErrorHandler(async (error, _request, reply) => {
-    if (error.name === 'AppError') {
-      return reply
-        .code((error as unknown as { statusCode: number }).statusCode)
-        .send((error as unknown as { toJSON: () => unknown }).toJSON());
+  app.setErrorHandler(async (error: unknown, _request, reply) => {
+    const err = error as Error & { name?: string; statusCode?: number; toJSON?: () => unknown; code?: string };
+    if (err.name === 'AppError' && err.statusCode != null && typeof err.toJSON === 'function') {
+      return reply.code(err.statusCode).send(err.toJSON());
     }
-    // Unexpected errors: log, return generic 500 (never leak stack/SQL)
-    app.log.error({ err: { message: error.message, code: (error as NodeJS.ErrnoException).code } }, 'Unhandled error');
+    // Unexpected errors: log without PII/stack, return generic 500 (LGPD)
+    app.log.error({ err: { message: err.message, code: err.code } }, 'Unhandled error');
     return reply.code(500).send({ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } });
   });
 
