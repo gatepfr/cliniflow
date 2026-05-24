@@ -21,9 +21,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 ## Current Position
 
 **Phase:** 1
-**Plan:** 01-06 complete — executing Plan 01-07 next (10 plans, 4 waves)
+**Plan:** 01-07 complete — executing Plan 01-08 next (10 plans, 4 waves)
 **Status:** Executing — Wave 3
-**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 6/10 plans complete)
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 7/10 plans complete)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** — 6/10 plans complete | Plan 01-06 done 2026-05-24 |
+| 1 | Foundation | **In progress** — 7/10 plans complete | Plan 01-07 done 2026-05-24 |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -45,7 +45,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 | Metric | Target | Actual |
 |--------|--------|--------|
 | Phases complete | 6 | 0 |
-| Plans complete (Phase 1) | 10 | 5 |
+| Plans complete (Phase 1) | 10 | 7 |
 | Requirements mapped | 54 | 54 |
 | Tests passing | — | — |
 | AI cost per tenant/month | <R$10 | — |
@@ -88,6 +88,8 @@ None
 | 2026-05-24 | IORedis named import `{ Redis }` in ESM | Default import has no construct signatures in strict TypeScript ESM — named export required |
 | 2026-05-24 | Pino Logger cast to `any` for Fastify constructor | Bridge between pino.Logger and FastifyLoggerOptions with exactOptionalPropertyTypes; same instance, safe |
 | 2026-05-24 | request.tenantCtx pattern (not ALS in onRequest) | RESEARCH.md Pitfall 2 — ALS does not propagate from onRequest hook to subsequent handlers in Fastify |
+| 2026-05-24 | defaultJobOptions on Queue (producer), not Worker (consumer) | BullMQ v5 WorkerOptions does not have defaultJobOptions; retry policy enforced at enqueue time in Phases 3-5 |
+| 2026-05-24 | createWorker uses `any` generic to avoid exactOptionalPropertyTypes conflict | Specific job data interfaces are not assignable to Record<string, unknown> with exactOptionalPropertyTypes; per-processor files maintain full type safety |
 
 ### Open Questions (from Research)
 
@@ -119,9 +121,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-24 — Plan 01-06 executed. Fastify API server complete: server.ts with CORS/auth/tenant plugins; four auth routes (signup/login/refresh/logout) with JWT+Redis refresh token rotation; Evolution webhook handler with async BullMQ enqueue. TypeScript build passes. Deviations: IORedis named import fix, Pino logger cast, error handler unknown-type fix.
+**Last session:** 2026-05-24 — Plan 01-07 executed. BullMQ worker process complete: workerConnection with maxRetriesPerRequest null; 5 typed queue processor stubs; single process (D-08) with per-queue concurrency (D-09); exponential backoff 1s->30s (D-10); DLQ pattern + Sentry reporting without PII; SIGTERM/SIGINT graceful shutdown. TypeScript build passes. Deviations: defaultJobOptions removed from WorkerOptions (belongs on Queue producer); generic type relaxed to any for exactOptionalPropertyTypes compatibility.
 
-**Next action:** Continue Phase 1 execution — Plan 01-07
+**Next action:** Continue Phase 1 execution — Plan 01-08
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1
