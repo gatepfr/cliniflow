@@ -21,9 +21,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 ## Current Position
 
 **Phase:** 1
-**Plan:** 01-09 complete — executing Plan 01-10 next (10 plans, 4 waves)
-**Status:** Executing — Wave 4
-**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 9/10 plans complete)
+**Plan:** 01-10 complete — Phase 1 all 10 plans done; awaiting manual GitHub CI checkpoint
+**Status:** Checkpoint — awaiting human-verify (CI green + branch protection)
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 10/10 plans complete — checkpoint pending)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** — 9/10 plans complete | Plan 01-09 done 2026-05-24 |
+| 1 | Foundation | **Checkpoint** — 10/10 plans complete | Plan 01-10 done 2026-05-24; awaiting CI green + branch protection |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -125,9 +125,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-24 — Plan 01-09 executed. Complete test suite for Phase 1: 4 Vitest configs, tenant isolation tests (Test A throws [SECURITY], Test B cross-tenant returns 0), audit log PII compliance (metadata has no full_name/phone_normalized/etc.), auth integration tests (signup 201+cookie, logout Redis null, refresh-after-logout 401), BullMQ smoke tests (all 5 queues), webhook unit tests (7 edge cases). Total: 32 tests passing. Fixed Prisma 7 adapter requirement and where-injection bug in $allOperations.
+**Last session:** 2026-05-24 — Plan 01-10 executed. Created .github/workflows/ci.yml (postgres:16 + redis:7-alpine services, turbo run test, worker build check) and apps/api/src/index.ts (production entry point). Commit 1fddfdc. Awaiting manual GitHub CI verification and branch protection setup.
 
-**Next action:** Continue Phase 1 execution — Plan 01-10 (CI pipeline / GitHub Actions)
+**Next action:** User must: push to GitHub, open test PR, verify CI green, set branch protection on main. Then Phase 1 is complete — continue to Phase 2.
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1
