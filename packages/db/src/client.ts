@@ -1,6 +1,18 @@
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { createId } from '@paralleldrive/cuid2';
 import { getTenantContext } from './context.js';
+
+// Prisma 7 uses the WASM-based "client" engine which requires a driver adapter.
+// PrismaPg bridges the @prisma/client to the pg (node-postgres) driver.
+// DATABASE_URL must be set in the environment.
+function createAdapter() {
+  const url = process.env['DATABASE_URL'];
+  if (!url) {
+    throw new Error('[DB] DATABASE_URL environment variable is required');
+  }
+  return new PrismaPg({ connectionString: url });
+}
 
 // Models that require tenant isolation (Prisma uses PascalCase for model names in $extends)
 // NEVER add AuditLog, Tenant, User — they have no tenantId or are queried before context exists
@@ -26,7 +38,9 @@ const READ_OPERATIONS = new Set([
 // Base client WITHOUT $extends — used for audit log writes to prevent infinite recursion.
 // See RESEARCH.md Pitfall 5: writing audit logs via the extended `prisma` client would
 // re-enter $allOperations → deadlock. Use baseClient for ALL internal writes.
+// Prisma 7: adapter required — uses PrismaPg with pg driver (WASM engine, no binary).
 export const baseClient = new PrismaClient({
+  adapter: createAdapter(),
   log: process.env['NODE_ENV'] === 'development' ? ['error', 'warn'] : ['error'],
 });
 
@@ -58,20 +72,22 @@ export const prisma = baseClient.$extends({
           };
         }
 
-        // Inject tenantId into WHERE clause for write operations (scope mutations to tenant)
-        if (WRITE_OPERATIONS.has(operation)) {
+        // Inject tenantId into data payload for create operations (no `where` on create)
+        if (operation === 'create' || operation === 'createMany') {
+          args = {
+            ...args,
+            data: { ...(args['data'] as Record<string, unknown> ?? {}), tenantId: ctx.tenantId },
+          };
+        }
+
+        // Inject tenantId into WHERE clause for write operations that support it
+        // (update, delete, upsert, updateMany, deleteMany — NOT create/createMany)
+        const WRITE_WITH_WHERE = new Set(['update', 'delete', 'upsert', 'updateMany', 'deleteMany']);
+        if (WRITE_WITH_WHERE.has(operation)) {
           args = {
             ...args,
             where: { ...(args['where'] as Record<string, unknown> ?? {}), tenantId: ctx.tenantId },
           };
-
-          // Inject tenantId into data payload for create operations
-          if (operation === 'create' || operation === 'createMany') {
-            args = {
-              ...args,
-              data: { ...(args['data'] as Record<string, unknown> ?? {}), tenantId: ctx.tenantId },
-            };
-          }
 
           // Inject tenantId into create side of upsert (update side keeps as-is)
           if (operation === 'upsert') {
