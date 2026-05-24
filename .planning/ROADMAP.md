@@ -3,7 +3,7 @@
 **Total phases:** 6
 **Requirements covered:** 54/54 ✓
 **Granularity:** Standard
-**Updated:** 2026-05-23
+**Updated:** 2026-05-24
 
 ---
 
@@ -33,7 +33,19 @@
 4. Every create/read/update on a patient record produces an `audit_log` row containing `action`, `entity`, `entity_id`, `user_id`, and `tenant_id` — with no PII in the `metadata` column.
 5. A BullMQ job submitted to any of the five named queues (`campaign-dispatch`, `ai-conversation`, `appointment-confirm`, `recall-scheduler`, `webhook-evolution`) is picked up by the worker process and executed; Redis is configured with `maxmemory-policy noeviction`.
 
-**Plans**: TBD
+**Plans**: 10 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Monorepo scaffold: root workspace config, pnpm workspaces, Turborepo pipeline, tsconfig.base.json, all 8 package.json files
+- [ ] 01-02-PLAN.md — Docker Compose environment: PostgreSQL 16, Redis 7 (noeviction), Evolution API v2.3.7, .env.example, .gitignore
+- [ ] 01-03-PLAN.md — Prisma schema (12 models), tenant ALS context, extended client with tenant isolation + audit log, [BLOCKING] migration
+- [ ] 01-04-PLAN.md — packages/shared: AppError, createId (cuid2), QUEUE_NAMES, Zod auth schemas (PT-BR), shared types
+- [ ] 01-05-PLAN.md — packages/whatsapp: Evolution API HTTP client, webhook apikey verifier (constant-time), PII-safe job data extraction
+- [ ] 01-06-PLAN.md — apps/api: Fastify server, auth plugin, tenant middleware, auth routes (signup/login/refresh/logout), webhook handler
+- [ ] 01-07-PLAN.md — apps/worker: BullMQ worker process, 5 queues with correct concurrency, exponential retry, DLQ + Sentry
+- [ ] 01-08-PLAN.md — apps/web: React 19 + Vite + Tailwind v4 CSS-first scaffold (no tailwind.config.js)
+- [ ] 01-09-PLAN.md — Test suite: tenant isolation tests A/B/C, auth integration tests, queue smoke tests, webhook unit tests
+- [ ] 01-10-PLAN.md — CI pipeline: GitHub Actions workflow + branch protection instructions
 
 ---
 
@@ -127,7 +139,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/10 | Not started | - |
 | 2. Data & Configuration | 0/? | Not started | - |
 | 3. Campaign Engine | 0/? | Not started | - |
 | 4. AI Conversation & Inbox | 0/? | Not started | - |
