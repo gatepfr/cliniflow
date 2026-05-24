@@ -40,7 +40,7 @@ Plans:
 - [x] 01-02-PLAN.md — Docker Compose environment: PostgreSQL 16, Redis 7 (noeviction), Evolution API v2.3.7, .env.example, .gitignore ✓ 2026-05-24
 - [x] 01-03-PLAN.md — Prisma schema (12 models), tenant ALS context, extended client with tenant isolation + audit log, [BLOCKING] migration ✓ 2026-05-24
 - [x] 01-04-PLAN.md — packages/shared: AppError, createId (cuid2), QUEUE_NAMES, Zod auth schemas (PT-BR), shared types ✓ 2026-05-24
-- [ ] 01-05-PLAN.md — packages/whatsapp: Evolution API HTTP client, webhook apikey verifier (constant-time), PII-safe job data extraction
+- [x] 01-05-PLAN.md — packages/whatsapp: Evolution API HTTP client, webhook apikey verifier (constant-time), PII-safe job data extraction ✓ 2026-05-24
 - [ ] 01-06-PLAN.md — apps/api: Fastify server, auth plugin, tenant middleware, auth routes (signup/login/refresh/logout), webhook handler
 - [ ] 01-07-PLAN.md — apps/worker: BullMQ worker process, 5 queues with correct concurrency, exponential retry, DLQ + Sentry
 - [ ] 01-08-PLAN.md — apps/web: React 19 + Vite + Tailwind v4 CSS-first scaffold (no tailwind.config.js)
@@ -139,7 +139,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 4/10 | In progress | - |
+| 1. Foundation | 5/10 | In progress | - |
 | 2. Data & Configuration | 0/? | Not started | - |
 | 3. Campaign Engine | 0/? | Not started | - |
 | 4. AI Conversation & Inbox | 0/? | Not started | - |

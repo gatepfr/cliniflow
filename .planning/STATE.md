@@ -21,9 +21,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 ## Current Position
 
 **Phase:** 1
-**Plan:** 01-04 complete — executing Plan 01-05 next (10 plans, 4 waves)
+**Plan:** 01-05 complete — executing Plan 01-06 next (10 plans, 4 waves)
 **Status:** Executing — Wave 2
-**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 4/10 plans complete)
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 5/10 plans complete)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** — 4/10 plans complete | Plan 01-04 done 2026-05-24 |
+| 1 | Foundation | **In progress** — 5/10 plans complete | Plan 01-05 done 2026-05-24 |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -45,7 +45,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 | Metric | Target | Actual |
 |--------|--------|--------|
 | Phases complete | 6 | 0 |
-| Plans complete (Phase 1) | 10 | 4 |
+| Plans complete (Phase 1) | 10 | 5 |
 | Requirements mapped | 54 | 54 |
 | Tests passing | — | — |
 | AI cost per tenant/month | <R$10 | — |
@@ -82,6 +82,9 @@ None
 | 2026-05-24 | baseClient for audit log writes (not extended prisma) | Prevents infinite recursion through $allOperations extension (RESEARCH.md Pitfall 5) |
 | 2026-05-24 | Zod v4 uses `error` param instead of deprecated `required_error` | `required_error` removed from Zod v4 TypeScript types; `error` is the unified v4 API for all error messages |
 | 2026-05-24 | LoginSchema .max(100) on password prevents bcrypt DoS | bcrypt silently truncates at 72 bytes — unbounded password allows crafting colliding hashes |
+| 2026-05-24 | Evolution API uses apikey in JSON body (not HMAC) for webhook verification | RESEARCH.md Pattern 5 confirmed: v2.3.7 embeds apikey field in webhook body; verified with constant-time comparison |
+| 2026-05-24 | extractWebhookJobData() omits body.data entirely | LGPD art. 11 compliance — WhatsApp message content must never enter BullMQ job storage |
+| 2026-05-24 | Length equalization before timingSafeEqual | Prevents short-circuit timing leak on length mismatch (T-1-PLAN05-03) |
 
 ### Open Questions (from Research)
 
@@ -113,9 +116,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-24 — Plan 01-04 executed. Shared package complete: AppError, createId() with cuid2, QUEUE_NAMES (6 constants), 8 shared TypeScript types, SignupSchema + LoginSchema with PT-BR messages. Fixed Zod v4 API (required_error → error param).
+**Last session:** 2026-05-24 — Plan 01-05 executed. WhatsApp wrapper package complete: Evolution API HTTP client (sendTextMessage, sendTypingIndicator, createInstance) using fetch + apikey header; webhook verifier (verifyEvolutionWebhook) with timingSafeEqual; extractWebhookJobData omitting body.data for LGPD compliance. Build passes without TypeScript errors.
 
-**Next action:** Continue Phase 1 execution — Plan 01-05
+**Next action:** Continue Phase 1 execution — Plan 01-06
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1
