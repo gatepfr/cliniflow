@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  # PostgreSQL CI service connection
+  DATABASE_URL: postgresql://clinica:changeme@localhost:5432/clinicaflow
+  REDIS_HOST: localhost
+  REDIS_PORT: "6379"
+  # JWT secrets (safe placeholder values for CI — no real data)
+  JWT_ACCESS_SECRET: ci-test-secret-min-32-chars-placeholder
+  JWT_REFRESH_SECRET: ci-test-refresh-secret-min-32-chars-placeholder
+  JWT_ACCESS_TTL: 15m
+  # Evolution API (not running in CI — webhook tests are unit tests)
+  EVOLUTION_API_URL: http://localhost:8080
+  EVOLUTION_API_KEY: ci-test-api-key
+  # Sentry disabled in CI
+  SENTRY_DSN: ""
+  NODE_ENV: test
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: clinicaflow
+          POSTGRES_USER: clinica
+          POSTGRES_PASSWORD: changeme
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Prisma migration
+        run: npx prisma migrate deploy --schema packages/db/prisma/schema.prisma
+
+      - name: Generate Prisma client
+        run: npx prisma generate --schema packages/db/prisma/schema.prisma
+
+      - name: Build packages
+        run: pnpm build --filter=@clinicaflow/shared --filter=@clinicaflow/db --filter=@clinicaflow/whatsapp
+
+      - name: Build worker (TypeScript compile check)
+        run: pnpm --filter @clinicaflow/worker build
+        # Verifies worker TypeScript compiles without errors even though
+        # worker has no dedicated test runner in CI (production worker
+        # uses inline test workers in queues.test.ts)
+
+      - name: Run tests
+        run: pnpm turbo run test
+        # CI fails and blocks merge if this step exits non-zero (FOUND-03)
+
+      - name: Upload coverage (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: "**/coverage/**"
+          if-no-files-found: ignore
