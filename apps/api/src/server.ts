@@ -6,11 +6,17 @@ import tenantPlugin from './plugins/tenant.js';
 import { authRoutes } from './routes/auth/index.js';
 import { webhookRoutes } from './routes/webhooks/index.js';
 
-export async function buildApp() {
+interface BuildAppOptions {
+  /** Override logger — pass `false` in tests to silence log output */
+  logger?: boolean | object;
+}
+
+export async function buildApp(opts: BuildAppOptions = {}) {
   const app = Fastify({
     // Cast to any to bridge Pino Logger -> FastifyLoggerOptions — safe, same pino instance
+    // In tests, caller may pass { logger: false } to suppress output.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    logger: logger as any,
+    logger: (opts.logger !== undefined ? opts.logger : logger) as any,
     trustProxy: true,
   });
 
