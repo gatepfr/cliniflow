@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+  id        String   @id
+  name      String
+  plan      String   @default("starter")
+  status    String   @default("trial")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  users     User[]
+  patients  Patient[]
+  campaigns Campaign[]
+  aiConfigs AiConfig[]
+
+  @@map("tenant")
+}
+
+model User {
+  id           String   @id
+  tenantId     String   @map("tenant_id")
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  name         String
+  role         String   @default("staff")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@map("user")
+}
+
+model Patient {
+  id              String    @id
+  tenantId        String    @map("tenant_id")
+  phoneNormalized String    @map("phone_normalized")
+  fullName        String    @map("full_name")
+  birthDate       DateTime? @map("birth_date") @db.Date
+  firstVisitAt    DateTime? @map("first_visit_at") @db.Timestamptz
+  lastVisitAt     DateTime? @map("last_visit_at") @db.Timestamptz
+  totalVisits     Int       @default(0) @map("total_visits")
+  totalSpentCents Int       @default(0) @map("total_spent_cents")
+  tags            Json      @default("[]")
+  customFields    Json      @default("{}") @map("custom_fields")
+  optInAt         DateTime? @map("opt_in_at") @db.Timestamptz
+  optOutAt        DateTime? @map("opt_out_at") @db.Timestamptz
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id])
+  visits        Visit[]
+  treatments    Treatment[]
+  conversations Conversation[]
+  appointments  Appointment[]
+  messages      Message[]
+
+  @@unique([tenantId, phoneNormalized])
+  @@index([tenantId, deletedAt])
+  @@index([tenantId, lastVisitAt])
+  @@map("patient")
+}
+
+model Visit {
+  id         String   @id
+  tenantId   String   @map("tenant_id")
+  patientId  String   @map("patient_id")
+  date       DateTime @db.Date
+  procedure  String
+  valueCents Int      @default(0) @map("value_cents")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, date])
+  @@map("visit")
+}
+
+model Treatment {
+  id                String   @id
+  tenantId          String   @map("tenant_id")
+  patientId         String   @map("patient_id")
+  name              String
+  startedAt         DateTime @map("started_at") @db.Timestamptz
+  expectedSessions  Int      @default(1) @map("expected_sessions")
+  completedSessions Int      @default(0) @map("completed_sessions")
+  status            String   @default("in_progress")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId])
+  @@index([tenantId, status])
+  @@map("treatment")
+}
+
+model Campaign {
+  id             String    @id
+  tenantId       String    @map("tenant_id")
+  name           String
+  segmentFilter  Json      @default("{}") @map("segment_filter")
+  templateId     String?   @map("template_id")
+  scheduleConfig Json      @default("{}") @map("schedule_config")
+  status         String    @default("draft")
+  startedAt      DateTime? @map("started_at") @db.Timestamptz
+  finishedAt     DateTime? @map("finished_at") @db.Timestamptz
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  messages Message[]
+
+  @@index([tenantId, status])
+  @@map("campaign")
+}
+
+model Message {
+  id          String    @id
+  tenantId    String    @map("tenant_id")
+  campaignId  String    @map("campaign_id")
+  patientId   String    @map("patient_id")
+  contentHash String    @map("content_hash")
+  status      String    @default("queued")
+  sentAt      DateTime? @map("sent_at") @db.Timestamptz
+  deliveredAt DateTime? @map("delivered_at") @db.Timestamptz
+  readAt      DateTime? @map("read_at") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  patient  Patient  @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, campaignId])
+  @@index([tenantId, patientId])
+  @@index([tenantId, status])
+  @@map("message")
+}
+
+model Conversation {
+  id              String    @id
+  tenantId        String    @map("tenant_id")
+  patientId       String    @map("patient_id")
+  status          String    @default("ai")
+  lastMessageAt   DateTime? @map("last_message_at") @db.Timestamptz
+  aiHandoffReason String?   @map("ai_handoff_reason")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  patient      Patient       @relation(fields: [patientId], references: [id])
+  chatMessages ChatMessage[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, patientId])
+  @@map("conversation")
+}
+
+model ChatMessage {
+  id             String   @id
+  tenantId       String   @map("tenant_id")
+  conversationId String   @map("conversation_id")
+  direction      String
+  content        String
+  aiGenerated    Boolean  @default(false) @map("ai_generated")
+  sentAt         DateTime @default(now()) @map("sent_at") @db.Timestamptz
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+
+  @@index([tenantId, conversationId])
+  @@map("chat_message")
+}
+
+model Appointment {
+  id          String   @id
+  tenantId    String   @map("tenant_id")
+  patientId   String   @map("patient_id")
+  scheduledAt DateTime @map("scheduled_at") @db.Timestamptz
+  status      String   @default("scheduled")
+  procedure   String?
+  valueCents  Int      @default(0) @map("value_cents")
+  source      String   @default("manual")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, scheduledAt])
+  @@map("appointment")
+}
+
+model AiConfig {
+  id                  String   @id
+  tenantId            String   @unique @map("tenant_id")
+  basePrompt          String   @default("") @map("base_prompt")
+  tone                String   @default("informal")
+  faqContent          String   @default("") @map("faq_content")
+  triggerWordsHandoff Json     @default("[]") @map("trigger_words_handoff")
+  ticketMedioCents    Int      @default(0) @map("ticket_medio_cents")
+  businessHours       Json     @default("{}") @map("business_hours")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@map("ai_config")
+}
+
+model AuditLog {
+  id        String   @id
+  tenantId  String   @map("tenant_id")
+  userId    String   @map("user_id")
+  action    String
+  entity    String
+  entityId  String   @map("entity_id")
+  metadata  Json     @default("{}")
+  ip        String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([tenantId, entity])
+  @@index([tenantId, createdAt])
+  @@map("audit_log")
+}
