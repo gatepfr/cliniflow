@@ -102,11 +102,12 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-23 — Initial project setup: PROJECT.md, REQUIREMENTS.md, research, ROADMAP.md, STATE.md created.
+**Last session:** 2026-05-23 — Phase 1 context gathered via /gsd-discuss-phase 1.
 
-**Next action:** Begin Phase 1 planning via `/gsd-plan-phase 1`
+**Next action:** `/gsd-plan-phase 1`
 
 **Context to reload next session:**
+- `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1
 - `.planning/PROJECT.md` — core value, constraints, stack decisions
 - `.planning/ROADMAP.md` — 6-phase structure and success criteria
 - `.planning/REQUIREMENTS.md` — 54 v1 requirements with traceability
