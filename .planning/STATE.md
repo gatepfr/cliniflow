@@ -1,6 +1,6 @@
 # Project State: ClínicaFlow
 
-**Last updated:** 2026-05-24
+**Last updated:** 2026-05-24T17:33:01Z
 **Current phase:** Phase 1 — Foundation (Executing — Wave 2)
 **Completed phases:** None
 
@@ -21,9 +21,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 ## Current Position
 
 **Phase:** 1
-**Plan:** 01-05 complete — executing Plan 01-06 next (10 plans, 4 waves)
-**Status:** Executing — Wave 2
-**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 5/10 plans complete)
+**Plan:** 01-06 complete — executing Plan 01-07 next (10 plans, 4 waves)
+**Status:** Executing — Wave 3
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 6/10 plans complete)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** — 5/10 plans complete | Plan 01-05 done 2026-05-24 |
+| 1 | Foundation | **In progress** — 6/10 plans complete | Plan 01-06 done 2026-05-24 |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -85,6 +85,9 @@ None
 | 2026-05-24 | Evolution API uses apikey in JSON body (not HMAC) for webhook verification | RESEARCH.md Pattern 5 confirmed: v2.3.7 embeds apikey field in webhook body; verified with constant-time comparison |
 | 2026-05-24 | extractWebhookJobData() omits body.data entirely | LGPD art. 11 compliance — WhatsApp message content must never enter BullMQ job storage |
 | 2026-05-24 | Length equalization before timingSafeEqual | Prevents short-circuit timing leak on length mismatch (T-1-PLAN05-03) |
+| 2026-05-24 | IORedis named import `{ Redis }` in ESM | Default import has no construct signatures in strict TypeScript ESM — named export required |
+| 2026-05-24 | Pino Logger cast to `any` for Fastify constructor | Bridge between pino.Logger and FastifyLoggerOptions with exactOptionalPropertyTypes; same instance, safe |
+| 2026-05-24 | request.tenantCtx pattern (not ALS in onRequest) | RESEARCH.md Pitfall 2 — ALS does not propagate from onRequest hook to subsequent handlers in Fastify |
 
 ### Open Questions (from Research)
 
@@ -116,9 +119,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-24 — Plan 01-05 executed. WhatsApp wrapper package complete: Evolution API HTTP client (sendTextMessage, sendTypingIndicator, createInstance) using fetch + apikey header; webhook verifier (verifyEvolutionWebhook) with timingSafeEqual; extractWebhookJobData omitting body.data for LGPD compliance. Build passes without TypeScript errors.
+**Last session:** 2026-05-24 — Plan 01-06 executed. Fastify API server complete: server.ts with CORS/auth/tenant plugins; four auth routes (signup/login/refresh/logout) with JWT+Redis refresh token rotation; Evolution webhook handler with async BullMQ enqueue. TypeScript build passes. Deviations: IORedis named import fix, Pino logger cast, error handler unknown-type fix.
 
-**Next action:** Continue Phase 1 execution — Plan 01-06
+**Next action:** Continue Phase 1 execution — Plan 01-07
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1
