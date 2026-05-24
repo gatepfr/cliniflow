@@ -12,5 +12,13 @@
   "devDependencies": {
     "turbo": "2.9.14",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "esbuild",
+      "msgpackr-extract",
+      "prisma"
+    ]
   }
 }
