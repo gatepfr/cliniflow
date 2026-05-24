@@ -1,7 +1,7 @@
 # Project State: ClínicaFlow
 
-**Last updated:** 2026-05-24T17:33:01Z
-**Current phase:** Phase 1 — Foundation (Executing — Wave 2)
+**Last updated:** 2026-05-24T18:35:00Z
+**Current phase:** Phase 1 — Foundation (Executing — Wave 4)
 **Completed phases:** None
 
 ---
@@ -21,9 +21,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 ## Current Position
 
 **Phase:** 1
-**Plan:** 01-08 complete — executing Plan 01-09 next (10 plans, 4 waves)
-**Status:** Executing — Wave 3
-**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 8/10 plans complete)
+**Plan:** 01-09 complete — executing Plan 01-10 next (10 plans, 4 waves)
+**Status:** Executing — Wave 4
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 9/10 plans complete)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** — 8/10 plans complete | Plan 01-08 done 2026-05-24 |
+| 1 | Foundation | **In progress** — 9/10 plans complete | Plan 01-09 done 2026-05-24 |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -45,9 +45,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 | Metric | Target | Actual |
 |--------|--------|--------|
 | Phases complete | 6 | 0 |
-| Plans complete (Phase 1) | 10 | 7 |
+| Plans complete (Phase 1) | 10 | 9 |
 | Requirements mapped | 54 | 54 |
-| Tests passing | — | — |
+| Tests passing | — | 32 (7 DB + 6 API + 5 worker + 7 whatsapp + 7 webhook) |
 | AI cost per tenant/month | <R$10 | — |
 
 ---
@@ -90,6 +90,10 @@ None
 | 2026-05-24 | request.tenantCtx pattern (not ALS in onRequest) | RESEARCH.md Pitfall 2 — ALS does not propagate from onRequest hook to subsequent handlers in Fastify |
 | 2026-05-24 | defaultJobOptions on Queue (producer), not Worker (consumer) | BullMQ v5 WorkerOptions does not have defaultJobOptions; retry policy enforced at enqueue time in Phases 3-5 |
 | 2026-05-24 | createWorker uses `any` generic to avoid exactOptionalPropertyTypes conflict | Specific job data interfaces are not assignable to Record<string, unknown> with exactOptionalPropertyTypes; per-processor files maintain full type safety |
+| 2026-05-24 | Prisma 7 WASM engine requires @prisma/adapter-pg | Binary engine removed in Prisma 7; PrismaPg adapter bridges to pg driver; DATABASE_URL passed via createAdapter() factory |
+| 2026-05-24 | $allOperations create fix: inject tenantId into data only (not where) | Prisma create has no where clause; original code injected where on create causing PrismaClientValidationError |
+| 2026-05-24 | buildApp({ logger: false }) for test environments | Fastify rejects raw pino Logger instance in some test module contexts; optional override prevents test breakage |
+| 2026-05-24 | Worker tests use Redis DB 15 (isolated) | Avoids polluting dev Redis DB 0; flushdb in afterAll guarantees clean state between test runs |
 
 ### Open Questions (from Research)
 
@@ -121,9 +125,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-24 — Plan 01-08 executed. React 19 + Vite + Tailwind v4 frontend scaffold complete: vite.config.ts with @tailwindcss/vite plugin, index.html, src/index.css (CSS-first @import "tailwindcss"), src/main.tsx (createRoot + StrictMode), src/App.tsx placeholder, src/components/ui/.gitkeep. Build verified: 16 modules, exits 0. No tailwind.config.js.
+**Last session:** 2026-05-24 — Plan 01-09 executed. Complete test suite for Phase 1: 4 Vitest configs, tenant isolation tests (Test A throws [SECURITY], Test B cross-tenant returns 0), audit log PII compliance (metadata has no full_name/phone_normalized/etc.), auth integration tests (signup 201+cookie, logout Redis null, refresh-after-logout 401), BullMQ smoke tests (all 5 queues), webhook unit tests (7 edge cases). Total: 32 tests passing. Fixed Prisma 7 adapter requirement and where-injection bug in $allOperations.
 
-**Next action:** Continue Phase 1 execution — Plan 01-09
+**Next action:** Continue Phase 1 execution — Plan 01-10 (CI pipeline / GitHub Actions)
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1

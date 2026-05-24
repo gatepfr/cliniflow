@@ -43,8 +43,8 @@ Plans:
 - [x] 01-05-PLAN.md — packages/whatsapp: Evolution API HTTP client, webhook apikey verifier (constant-time), PII-safe job data extraction ✓ 2026-05-24
 - [x] 01-06-PLAN.md — apps/api: Fastify server, auth plugin, tenant middleware, auth routes (signup/login/refresh/logout), webhook handler ✓ 2026-05-24
 - [x] 01-07-PLAN.md — apps/worker: BullMQ worker process, 5 queues with correct concurrency, exponential retry, DLQ + Sentry ✓ 2026-05-24
-- [ ] 01-08-PLAN.md — apps/web: React 19 + Vite + Tailwind v4 CSS-first scaffold (no tailwind.config.js)
-- [ ] 01-09-PLAN.md — Test suite: tenant isolation tests A/B/C, auth integration tests, queue smoke tests, webhook unit tests
+- [x] 01-08-PLAN.md — apps/web: React 19 + Vite + Tailwind v4 CSS-first scaffold (no tailwind.config.js) ✓ 2026-05-24
+- [x] 01-09-PLAN.md — Test suite: tenant isolation tests A/B/C, auth integration tests, queue smoke tests, webhook unit tests (32 tests, all green) ✓ 2026-05-24
 - [ ] 01-10-PLAN.md — CI pipeline: GitHub Actions workflow + branch protection instructions
 
 ---
