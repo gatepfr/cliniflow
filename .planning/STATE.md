@@ -1,7 +1,7 @@
 # Project State: ClínicaFlow
 
-**Last updated:** 2026-05-23
-**Current phase:** Not started
+**Last updated:** 2026-05-24
+**Current phase:** Phase 1 — Foundation (Executing — Wave 1)
 **Completed phases:** None
 
 ---
@@ -20,10 +20,10 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 ## Current Position
 
-**Phase:** —
-**Plan:** —
-**Status:** Not started
-**Progress:** ░░░░░░░░░░ 0/6 phases
+**Phase:** 1
+**Plan:** 01-01 complete — executing Plan 01-02 next (10 plans, 4 waves)
+**Status:** Executing — Wave 1
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 1/10 plans complete)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | Not started | Blocker for all other phases — do not skip |
+| 1 | Foundation | **In progress** — 1/10 plans complete | Plan 01-01 done 2026-05-24 |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -45,6 +45,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 | Metric | Target | Actual |
 |--------|--------|--------|
 | Phases complete | 6 | 0 |
+| Plans complete (Phase 1) | 10 | 1 |
 | Requirements mapped | 54 | 54 |
 | Tests passing | — | — |
 | AI cost per tenant/month | <R$10 | — |
@@ -63,6 +64,8 @@ None
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-05-24 | pnpm.onlyBuiltDependencies for prisma/esbuild | pnpm 10.x requires explicit approval for build scripts; required for Prisma engine binary and esbuild native compile |
+| 2026-05-24 | apps/web tsconfig standalone (not extending base) | NodeNext incompatible with Vite Bundler module resolution; web needs ESNext + Bundler + DOM lib |
 | 2026-05-23 | React 19 (not 18) | Latest stable confirmed by research |
 | 2026-05-23 | Prisma 7.8.0 | Start on current version; avoid forced migration in 6-9 months |
 | 2026-05-23 | `@paralleldrive/cuid2` (not `cuid`) | `cuid` deprecated since 2022 |
@@ -82,7 +85,7 @@ None
 | Alocação de instâncias Evolution no pool Starter | WhatsApp pool architecture | Phase 3 |
 | Ticket médio default por tenant | ROI calculation | Phase 5 |
 | DPO/Encarregado LGPD | Obrigatório para dados sensíveis | Phase 6 |
-| Evolution API: versão Docker + algoritmo HMAC | Wrapper implementation | Phase 1 |
+| Evolution API: versão Docker + algoritmo HMAC | Wrapper implementation | Plan 01-07 |
 
 ### Todos
 
@@ -102,9 +105,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-23 — Phase 1 context gathered via /gsd-discuss-phase 1.
+**Last session:** 2026-05-24 — Plan 01-01 executed. Monorepo skeleton complete, pnpm install clean.
 
-**Next action:** `/gsd-plan-phase 1`
+**Next action:** Continue Phase 1 execution — Plan 01-02 (docker-compose: PostgreSQL 16, Redis 7, Evolution API)
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1

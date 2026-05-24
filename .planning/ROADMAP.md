@@ -36,7 +36,7 @@
 **Plans**: 10 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Monorepo scaffold: root workspace config, pnpm workspaces, Turborepo pipeline, tsconfig.base.json, all 8 package.json files
+- [x] 01-01-PLAN.md — Monorepo scaffold: root workspace config, pnpm workspaces, Turborepo pipeline, tsconfig.base.json, all 8 package.json files ✓ 2026-05-24
 - [ ] 01-02-PLAN.md — Docker Compose environment: PostgreSQL 16, Redis 7 (noeviction), Evolution API v2.3.7, .env.example, .gitignore
 - [ ] 01-03-PLAN.md — Prisma schema (12 models), tenant ALS context, extended client with tenant isolation + audit log, [BLOCKING] migration
 - [ ] 01-04-PLAN.md — packages/shared: AppError, createId (cuid2), QUEUE_NAMES, Zod auth schemas (PT-BR), shared types
@@ -139,7 +139,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/10 | Not started | - |
+| 1. Foundation | 1/10 | In progress | - |
 | 2. Data & Configuration | 0/? | Not started | - |
 | 3. Campaign Engine | 0/? | Not started | - |
 | 4. AI Conversation & Inbox | 0/? | Not started | - |

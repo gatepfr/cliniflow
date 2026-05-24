@@ -9,7 +9,7 @@
 
 ### Foundation (Infraestrutura)
 
-- [ ] **FOUND-01**: Sistema inicializa como monorepo pnpm + Turborepo com apps/api, apps/web, apps/worker, packages/db, packages/shared, packages/ai, packages/whatsapp, packages/billing
+- [x] **FOUND-01**: Sistema inicializa como monorepo pnpm + Turborepo com apps/api, apps/web, apps/worker, packages/db, packages/shared, packages/ai, packages/whatsapp, packages/billing ✓ 2026-05-24 (Plan 01-01)
 - [ ] **FOUND-02**: Toda query ao banco é filtrada automaticamente por tenant_id via Prisma $extends + AsyncLocalStorage, sem possibilidade de cross-tenant query acidental
 - [ ] **FOUND-03**: Suite de testes de isolamento multi-tenant roda em CI e bloqueia merge se detectar query sem tenant_id
 - [ ] **FOUND-04**: Usuário pode criar conta, fazer login e permanecer autenticado via JWT + refresh token httpOnly cookie
@@ -146,7 +146,7 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Complete — Plan 01-01 (2026-05-24) |
 | FOUND-02 | Phase 1 | Pending |
 | FOUND-03 | Phase 1 | Pending |
 | FOUND-04 | Phase 1 | Pending |
