@@ -1,0 +1,10 @@
+/* Tailwind v4 — CSS-first configuration */
+/* NO tailwind.config.js needed. Theme customization goes in @theme {} blocks. */
+@import "tailwindcss";
+
+/* Custom theme extensions (add in future phases) */
+@theme {
+  /* ClínicaFlow brand colors — customize in Phase 6 */
+  --color-primary: oklch(0.55 0.2 250);
+  --color-primary-foreground: oklch(0.98 0.01 250);
+}
