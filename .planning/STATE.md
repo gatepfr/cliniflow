@@ -21,9 +21,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 ## Current Position
 
 **Phase:** 1
-**Plan:** 01-01 complete — executing Plan 01-02 next (10 plans, 4 waves)
+**Plan:** 01-02 complete — executing Plan 01-03 next (10 plans, 4 waves)
 **Status:** Executing — Wave 1
-**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 1/10 plans complete)
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 2/10 plans complete)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** — 1/10 plans complete | Plan 01-01 done 2026-05-24 |
+| 1 | Foundation | **In progress** — 2/10 plans complete | Plan 01-02 done 2026-05-24 |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -45,7 +45,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 | Metric | Target | Actual |
 |--------|--------|--------|
 | Phases complete | 6 | 0 |
-| Plans complete (Phase 1) | 10 | 1 |
+| Plans complete (Phase 1) | 10 | 2 |
 | Requirements mapped | 54 | 54 |
 | Tests passing | — | — |
 | AI cost per tenant/month | <R$10 | — |
@@ -72,6 +72,9 @@ None
 | 2026-05-23 | Evolution API via HTTP REST to Docker container | npm package deleted Dec 2023 |
 | 2026-05-23 | BullMQ rate limiting via Redis sliding window | `limiter.groupKey` removed in v3 OSS |
 | 2026-05-23 | Tailwind v4 CSS-first config | No `tailwind.config.js` — rewrite any v3 config copied from Verê CRM |
+| 2026-05-24 | Redis `noeviction` set via docker-compose command | Prevents silent BullMQ job eviction; alternative to redis.conf mount — simpler for dev |
+| 2026-05-24 | Evolution API uses `evolution_api` schema in same postgres container | Avoids fourth container; schema separation via connection string `?schema=evolution_api` |
+| 2026-05-24 | LOG_LEVEL ERROR for evolution-api in docker-compose | Reduces dev noise; INFO is extremely verbose for Evolution API container |
 | 2026-05-23 | Redis `maxmemory-policy noeviction` | Default `allkeys-lru` silently evicts BullMQ keys → duplicate sends → ban risk |
 | 2026-05-23 | 20 msgs/min WhatsApp limit (not 30) | Research lowered safe rate vs PROJECT.md to reduce ban risk |
 
@@ -105,9 +108,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-24 — Plan 01-01 executed. Monorepo skeleton complete, pnpm install clean.
+**Last session:** 2026-05-24 — Plan 01-02 executed. Docker dev environment complete: postgres:16, redis:7-alpine (noeviction), evoapicloud/evolution-api:v2.3.7. .env.example, .gitignore, .npmrc updated.
 
-**Next action:** Continue Phase 1 execution — Plan 01-02 (docker-compose: PostgreSQL 16, Redis 7, Evolution API)
+**Next action:** Continue Phase 1 execution — Plan 01-03 (Prisma schema, tenant isolation, audit log)
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1

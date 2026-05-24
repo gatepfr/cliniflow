@@ -37,7 +37,7 @@
 
 Plans:
 - [x] 01-01-PLAN.md — Monorepo scaffold: root workspace config, pnpm workspaces, Turborepo pipeline, tsconfig.base.json, all 8 package.json files ✓ 2026-05-24
-- [ ] 01-02-PLAN.md — Docker Compose environment: PostgreSQL 16, Redis 7 (noeviction), Evolution API v2.3.7, .env.example, .gitignore
+- [x] 01-02-PLAN.md — Docker Compose environment: PostgreSQL 16, Redis 7 (noeviction), Evolution API v2.3.7, .env.example, .gitignore ✓ 2026-05-24
 - [ ] 01-03-PLAN.md — Prisma schema (12 models), tenant ALS context, extended client with tenant isolation + audit log, [BLOCKING] migration
 - [ ] 01-04-PLAN.md — packages/shared: AppError, createId (cuid2), QUEUE_NAMES, Zod auth schemas (PT-BR), shared types
 - [ ] 01-05-PLAN.md — packages/whatsapp: Evolution API HTTP client, webhook apikey verifier (constant-time), PII-safe job data extraction
