@@ -10,11 +10,11 @@
 ### Foundation (Infraestrutura)
 
 - [x] **FOUND-01**: Sistema inicializa como monorepo pnpm + Turborepo com apps/api, apps/web, apps/worker, packages/db, packages/shared, packages/ai, packages/whatsapp, packages/billing ✓ 2026-05-24 (Plan 01-01)
-- [ ] **FOUND-02**: Toda query ao banco é filtrada automaticamente por tenant_id via Prisma $extends + AsyncLocalStorage, sem possibilidade de cross-tenant query acidental
+- [x] **FOUND-02**: Toda query ao banco é filtrada automaticamente por tenant_id via Prisma $extends + AsyncLocalStorage, sem possibilidade de cross-tenant query acidental ✓ 2026-05-24 (Plan 01-03)
 - [ ] **FOUND-03**: Suite de testes de isolamento multi-tenant roda em CI e bloqueia merge se detectar query sem tenant_id
 - [ ] **FOUND-04**: Usuário pode criar conta, fazer login e permanecer autenticado via JWT + refresh token httpOnly cookie
 - [ ] **FOUND-05**: Usuário pode fazer logout e ter sessão invalidada imediatamente
-- [ ] **FOUND-06**: Toda operação de leitura e escrita de dados de paciente gera entrada em audit_log com action, entity, entity_id, user_id, tenant_id e metadata sem PII
+- [x] **FOUND-06**: Toda operação de leitura e escrita de dados de paciente gera entrada em audit_log com action, entity, entity_id, user_id, tenant_id e metadata sem PII ✓ 2026-05-24 (Plan 01-03)
 
 ### Importação de Pacientes
 

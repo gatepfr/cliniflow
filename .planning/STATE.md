@@ -1,7 +1,7 @@
 # Project State: ClínicaFlow
 
 **Last updated:** 2026-05-24
-**Current phase:** Phase 1 — Foundation (Executing — Wave 1)
+**Current phase:** Phase 1 — Foundation (Executing — Wave 2)
 **Completed phases:** None
 
 ---
@@ -21,9 +21,9 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 ## Current Position
 
 **Phase:** 1
-**Plan:** 01-02 complete — executing Plan 01-03 next (10 plans, 4 waves)
-**Status:** Executing — Wave 1
-**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 2/10 plans complete)
+**Plan:** 01-03 complete — executing Plan 01-04 next (10 plans, 4 waves)
+**Status:** Executing — Wave 2
+**Progress:** ░░░░░░░░░░ 0/6 phases (Phase 1: 3/10 plans complete)
 
 ---
 
@@ -31,7 +31,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| 1 | Foundation | **In progress** — 2/10 plans complete | Plan 01-02 done 2026-05-24 |
+| 1 | Foundation | **In progress** — 3/10 plans complete | Plan 01-03 done 2026-05-24 |
 | 2 | Data & Configuration | Not started | Requires Phase 1 complete |
 | 3 | Campaign Engine | Not started | Requires Phase 2 complete |
 | 4 | AI Conversation & Inbox | Not started | Requires Phase 3 webhook infra |
@@ -45,7 +45,7 @@ See: `.planning/PROJECT.md` (updated 2026-05-23)
 | Metric | Target | Actual |
 |--------|--------|--------|
 | Phases complete | 6 | 0 |
-| Plans complete (Phase 1) | 10 | 2 |
+| Plans complete (Phase 1) | 10 | 3 |
 | Requirements mapped | 54 | 54 |
 | Tests passing | — | — |
 | AI cost per tenant/month | <R$10 | — |
@@ -77,6 +77,9 @@ None
 | 2026-05-24 | LOG_LEVEL ERROR for evolution-api in docker-compose | Reduces dev noise; INFO is extremely verbose for Evolution API container |
 | 2026-05-23 | Redis `maxmemory-policy noeviction` | Default `allkeys-lru` silently evicts BullMQ keys → duplicate sends → ban risk |
 | 2026-05-23 | 20 msgs/min WhatsApp limit (not 30) | Research lowered safe rate vs PROJECT.md to reduce ban risk |
+| 2026-05-24 | Prisma 7 datasource url in prisma.config.ts (not schema) | Prisma 7.8.0 breaking change — url removed from schema.prisma datasource block |
+| 2026-05-24 | docker-compose postgres port 5434 (not 5432) | Ports 5432 and 5433 already in use by local PostgreSQL instances on dev machine |
+| 2026-05-24 | baseClient for audit log writes (not extended prisma) | Prevents infinite recursion through $allOperations extension (RESEARCH.md Pitfall 5) |
 
 ### Open Questions (from Research)
 
@@ -108,9 +111,9 @@ None
 
 ## Session Continuity
 
-**Last session:** 2026-05-24 — Plan 01-02 executed. Docker dev environment complete: postgres:16, redis:7-alpine (noeviction), evoapicloud/evolution-api:v2.3.7. .env.example, .gitignore, .npmrc updated.
+**Last session:** 2026-05-24 — Plan 01-03 executed. Database layer complete: Prisma schema (12 models), AsyncLocalStorage tenant context, extended Prisma client with $allOperations tenant isolation + audit log, migration init applied to PostgreSQL (port 5434).
 
-**Next action:** Continue Phase 1 execution — Plan 01-03 (Prisma schema, tenant isolation, audit log)
+**Next action:** Continue Phase 1 execution — Plan 01-04 (packages/shared schemas — Zod validation schemas)
 
 **Context to reload next session:**
 - `.planning/phases/01-foundation/01-CONTEXT.md` — decisões capturadas para Fase 1
