@@ -71,19 +71,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Prisma migration
-        run: npx prisma migrate deploy --schema packages/db/prisma/schema.prisma
+        working-directory: packages/db
+        run: pnpm exec prisma migrate deploy
 
       - name: Generate Prisma client
-        run: npx prisma generate --schema packages/db/prisma/schema.prisma
+        working-directory: packages/db
+        run: pnpm exec prisma generate
 
       - name: Build packages
-        run: pnpm build --filter=@clinicaflow/shared --filter=@clinicaflow/db --filter=@clinicaflow/whatsapp
-
-      - name: Build worker (TypeScript compile check)
-        run: pnpm --filter @clinicaflow/worker build
-        # Verifies worker TypeScript compiles without errors even though
-        # worker has no dedicated test runner in CI (production worker
-        # uses inline test workers in queues.test.ts)
+        run: pnpm turbo run build --filter=@clinicaflow/shared --filter=@clinicaflow/db --filter=@clinicaflow/whatsapp --filter=@clinicaflow/worker
 
       - name: Run tests
         run: pnpm turbo run test
