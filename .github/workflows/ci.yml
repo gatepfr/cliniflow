@@ -82,7 +82,11 @@ jobs:
         run: pnpm turbo run build --filter=@clinicaflow/shared --filter=@clinicaflow/db --filter=@clinicaflow/whatsapp --filter=@clinicaflow/worker
 
       - name: Run tests
-        run: pnpm turbo run test
+        run: |
+          pnpm --filter @clinicaflow/whatsapp test
+          pnpm --filter @clinicaflow/db test
+          pnpm --filter @clinicaflow/api test
+          pnpm --filter @clinicaflow/worker test
         # CI fails and blocks merge if this step exits non-zero (FOUND-03)
 
       - name: Upload coverage (optional)

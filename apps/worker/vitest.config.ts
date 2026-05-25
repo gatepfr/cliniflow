@@ -6,5 +6,10 @@ export default defineConfig({
     globals: true,
     testTimeout: 20_000,
     pool: 'forks',
+    poolOptions: {
+      forks: {
+        env: process.env as Record<string, string>,
+      },
+    },
   },
 });
