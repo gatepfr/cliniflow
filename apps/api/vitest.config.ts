@@ -8,5 +8,10 @@ export default defineConfig({
     testTimeout: 15_000,
     pool: 'forks',
     singleFork: true,
+    poolOptions: {
+      forks: {
+        env: process.env as Record<string, string>,
+      },
+    },
   },
 });
